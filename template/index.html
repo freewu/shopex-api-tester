@@ -1,0 +1,61 @@
+<html> 
+	<head> 
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" /> 
+	<title>Api Tester alpha0.01</title> 
+	<script src="lib/jquery-1.4.4.min.js"></script> 
+<body>
+<form method="post" >
+<h2><?php if(defined("TOOLSNAME")) {echo TOOLSNAME;}?></h2>
+<div>
+	<h4>必需参数:</h4>
+	<span><label for=format_json><input type="checkbox" name="format_json" id="format_json" value="1" <?php if(isset($_POST["format_json"]) && $_POST["format_json"]){?>checked<?php }?>/>如果返回值是JSON格式 是否输出数据形式</label></span>
+	<ul>
+		<li><input value="url" disabled size="10" />:<input name="url" value="<?php echo $system['url'];?>" size="60" /></li>
+		<li><input value="Token" disabled size="10" />:<input name="token" value="<?php echo $system['token'];?>" size="60" /></li>
+		<?php foreach($required as $key=>$val) {?>
+			<li>
+				<input value="<?php echo $key;?>" disabled  size="10" />:<input name="required[<?php echo $key;?>]" value="<?php echo $val;?>" size="60" />
+			</li>
+		<?php }?>
+	</ul>
+</div>
+<hr width="100%" />
+<div>
+	<h4>添加的参数</h4>
+	<ul id="args">
+		<?php foreach($post as $key=>$val) {?>
+		<li>
+			<input name="name[]" value="<?php echo $key;?>"  size="10" />:<input name="value[]" value="<?php echo $val;?>" size="60" /><span class="btn_delete" onclick="delete_func(this);">X</span>
+		</li>
+		<?php }?>
+		<li><input type="button" value="添加一个参数" id="add_args"/></li>
+	</ul>
+</div>
+<hr width="100%" />
+<div><input type="submit"  value="提交查询"/></div>
+</form>
+
+<?php if($result) {?>
+<div>
+	<h4>请求的结果</h4>
+	<pre>
+		<?php echo $result;?>
+	</pre>
+</div>
+<?php }?>
+<script>
+var delete_func = function(e){
+	var tmp = $(".btn_delete").get();
+	if(e == tmp[0]) {
+		alert("把根留住");
+		return false;
+	}
+	$(e).parent("li").remove();
+}
+
+$("#add_args").click(function(){
+	$("#add_args").parent("li").prev().clone().insertBefore($("#add_args"));
+});
+</script>
+</body>
+</html>
