@@ -1,13 +1,16 @@
 <?php
 include_once("Snoopy.class.php");
+include_once("Cache.class.php");
 class Process
 {
     var $_data = null;
     var $_required = array();
     var $_url = null;
     var $_token = null;
+    var $_cache = null;
 
     function Process($required = array()){
+        $this->_cache = new Cache(APITYPE);
         // 必要参数的提交
         if(isset($_POST['required'])) $this->_required = $_POST['required'];
         if(empty($this->_required)) {
@@ -15,7 +18,7 @@ class Process
                 $this->_required[$item] = "";
             }
         }
-
+        
         // 系统参数
         if(isset($_POST['url']) && ($_POST['url'] && $_POST['url'] != "http://")) {
             $this->_url = $_POST['url'];
@@ -48,9 +51,9 @@ class Process
             $aData[ACNAME] = $this->makeAC($aData,$this->_token);
         }
         if($this->_url) { // 还是要验证是不是url的哈
-            $snoopy = new Snoopy();
-            // 还有格式的转换
-           $aData = array();
+           $snoopy = new Snoopy();
+           $aCache = array('url'=>$this->_url,'token'=>$this->_token);
+           $this->_cache->saveData(array_merge($aCache,$aData));
            if($snoopy->submit($this->_url,$aData)) {
                if(isset($_POST['format_json']) && $_POST['format_json']) {
                    if($aTemp = json_decode($snoopy->results)) return print_r($aTemp,1);
@@ -71,6 +74,11 @@ class Process
         return array("url"=>$this->_url,
                      "token"=>$this->_token
         );
+    }
+    
+    function getHistory()
+    {
+        return $this->_cache->getList();
     }
 }
 ?>

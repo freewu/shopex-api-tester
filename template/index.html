@@ -6,7 +6,7 @@
 <body>
 <form method="post" >
 <h2><?php if(defined("TOOLSNAME")) {echo TOOLSNAME;}?></h2>
-<div>
+<div style="float:left;width:600px">
 	<h4>必需参数:</h4>
 	<span><label for=format_json><input type="checkbox" name="format_json" id="format_json" value="1" <?php if(isset($_POST["format_json"]) && $_POST["format_json"]){?>checked<?php }?>/>如果返回值是JSON格式 是否输出数据形式</label></span>
 	<ul>
@@ -18,6 +18,27 @@
 			</li>
 		<?php }?>
 	</ul>
+</div>
+
+<div style="float:left;width:300px">
+    <h4>历史记录:</h4>
+    <div>
+    <select size="1" style="width:200px;">
+        <?php foreach($history as $key=>$val) {?>
+            <option value="<?php echo $val['url'];?>"><?php echo $val['url'];?></option>
+        <?php }?>
+    </select>
+    </div>
+    
+    <div>
+    <select multiple size="12" style="width:200px;">
+        <?php foreach($history as $val) {?>
+           <?php foreach($val['data'] as $key=>$val1) {?>
+           <option value="<?php echo $key;?>"><?php echo $key;?></option>
+           <?php }?>
+        <?php }?>
+    </select>
+    </div>
 </div>
 <hr width="100%" />
 <div>
