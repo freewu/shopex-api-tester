@@ -34,14 +34,14 @@ if($act=='l'||$act=='ls'){
 if($configfile||is_file('cliconfig/'.$configfile)){
     echo "you chosed [$configfile]\n";
     $data=null;
-    require_once('cliconfig/'.$configfile.'.config.php');
+    require('cliconfig/'.$configfile.'.config.php');
     if(!defined('APITYPE')||empty($data)){
-       echo "configfile: $configfile ,data Error \n";$configfile=null;continue 1; 
+       echo "config file: $configfile ,data Error \n";$configfile=null;continue 1; 
     }
     $required = require_once("config/config.".APITYPE.".php"); 
     foreach($required as $k){
         if(!strlen($data[$k])){
-            echo "configfile: $configfile ,\$data[$k] is required!  \n";$configfile=null;continue 2; 
+            echo "config file: $configfile ,\$data[$k] is required!  \n";$configfile=null;continue 2; 
         }
     }   
     // 3, 运行 api 
@@ -81,7 +81,8 @@ class climain{
             if(strpos($this->_url,"http://") === false) $this->_url = "http://".$this->_url;
         }
         if(isset($data['token'])) $this->_token = $data['token'];
-
+        unset($data['url']);
+        unset($data['token']);
         // 生成AC 也可能不叫AC
         if(defined("ACNAME") && ACNAME) {
             $data[ACNAME] = $this->makeAC($data,$this->_token);
