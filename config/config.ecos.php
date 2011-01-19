@@ -21,7 +21,7 @@ function assemble($params) {
 
 // ac名称  有的ac叫sign
 define("ACNAME","sign");
-
+define("METHOD","method"); // 请求的方法
 define("TOOLSNAME","ECOS API测试工具");
 
 // 必填项

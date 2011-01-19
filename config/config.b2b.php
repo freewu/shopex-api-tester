@@ -11,7 +11,7 @@ function makeAC($aData = array(),$token = '') {
 
 // ac名称  有的ac叫sign
 define("ACNAME","ac");
-
+define("METHOD","act"); // 请求的方法
 define("TOOLSNAME","SHOPEX4.8.x API测试工具");
 
 // 必填项
