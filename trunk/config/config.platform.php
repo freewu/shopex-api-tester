@@ -16,9 +16,8 @@ function makeAC($aData = array(),$token = '') {
     return md5($verify.$token);
 }
 
-// ac名称  有的ac叫sign
-define("ACNAME","ac");
-
+define("ACNAME","ac"); // ac名称  有的ac叫sign
+define("METHOD","act"); // 请求的方法
 define("TOOLSNAME","平台API测试工具");
 
 // 必填项

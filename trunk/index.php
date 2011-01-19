@@ -9,7 +9,6 @@ $post = $oProcess->getPost();
 $result = $oProcess->getResult();
 $system = $oProcess->getSystem();
 $history = $oProcess->getHistory();
-//print_r($history);die;
 
 include_once("template/index.html");
 ?>

@@ -15,6 +15,7 @@ function makeAC($aData = array(),$token = '') {
 
 // ac名称  有的ac叫sign
 define("ACNAME","sign");
+define("METHOD","method"); // 请求的方法
 define("TOOLSNAME","矩阵API测试工具");
 
 // 必填项
