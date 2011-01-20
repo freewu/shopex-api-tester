@@ -62,6 +62,8 @@ class Process
         if(isset($_POST['url']) && ($_POST['url'] && $_POST['url'] != "http://")) {
             $aResult['url'] = $_POST['url'];
             if(strpos($aResult['url'],"http://") === false) $aResult['url'] = "http://".$aResult['url'];
+        } else {
+            $aResult['url'] = "";
         }
         if(isset($_POST['token'])) $aResult['token'] = $_POST['token'];
         
@@ -92,7 +94,7 @@ class Process
             $aParams[ACNAME] = makeAC($aParams,$aData['token']);
         }
         
-        if($aData['url']) { // 还是要验证是不是url的哈
+        if(isset($aData['url']) && $aData['url']) { // 还是要验证是不是url的哈
            $snoopy = new Snoopy();
            if($snoopy->submit($aData['url'],$aParams)) {
                if(isset($aParams['format_json']) && $aParams['format_json']) {
@@ -146,6 +148,16 @@ class Process
     
     function getHistory() {
         return $this->_cache->getList();
+    }
+    
+    function getTypes() {
+        $oDir = opendir("./config");
+        $aResult = array();
+        while($item = readdir($oDir)) {
+           $aTemp = explode(".",$item);
+           if(isset($aTemp[1]) && !empty($aTemp[1]) && isset($aTemp[2])) $aResult[] = $aTemp[1];
+        }
+        return $aResult;
     }
 }
 ?>
