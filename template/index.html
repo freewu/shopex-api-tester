@@ -73,6 +73,13 @@
 	</pre>
 </div>
 <?php }?>
+
+<div style="z-index:999;top:0px;left:360px;position:absolute;background:#eeeeee;">
+<h5>请选择你要使用的api类型</h5>
+<?php foreach($types as $key=>$val) {?>
+<label><input type="radio" name="type" value="<?php echo $val;?>" <?php if($val == APITYPE){?>checked<?php }?>/><?php echo $val;?></label>&nbsp;&nbsp;
+<?php }?>
+</div>
 <script>
 var delete_func = function(e){
 	var tmp = $(".btn_delete").get();
@@ -108,6 +115,11 @@ $("#sel_url").change(function(){
         }
     }
     return false;
+});
+
+$(":radio").click(function(){
+    $.cookie("type",this.value);
+    window.location.reload();
 });
 </script>
 </body>
