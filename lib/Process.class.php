@@ -36,7 +36,7 @@ class Process
         }
         
         // 参数
-        $aResult['post'] = $aTemp();
+        $aResult['post'] = $aTemp;
         return $aResult;
     }
     

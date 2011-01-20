@@ -4,6 +4,9 @@
 	<title>Api Tester alpha0.01</title> 
 	<script src="lib/jquery-1.4.4.min.js"></script>
 	<script src="lib/jquery.cookie.js"></script>
+	<script>
+	var json_data = <?php echo json_encode($history);?>;
+	</script>
 <body>
 <form method="post" >
 <h2><?php if(defined("TOOLSNAME")) {echo TOOLSNAME;}?></h2>
@@ -24,9 +27,10 @@
 <div style="float:left;width:300px">
     <h4>历史记录:</h4>
     <div>
-    <select size="1" style="width:200px;" onchange="alert('dfsdfdsfds');" id="sel_url">
+    <select size="1" style="width:200px;" id="sel_url">
+        <option value=""  <?php if(empty($system['url'])){?>selected<?php }?>>请选择</option>
         <?php foreach($history as $key=>$val) {?>
-            <option value="<?php echo $val['url'];?>"><?php echo $val['url'];?></option>
+            <option value="<?php echo $val['url'];?>" <?php if($val['url'] == $system['url']){?>selected<?php }?>  index="<?php echo $key;?>"><?php echo $val['url'];?></option>
         <?php }?>
     </select>
     </div>
@@ -34,8 +38,10 @@
     <div>
     <select multiple size="12" style="width:200px;" id="sel_list">
         <?php foreach($history as $val) {?>
-           <?php foreach($val['data'] as $key=>$val1) {?>
-           <option value="<?php echo $key;?>"><?php echo $key;?></option>
+           <?php if($val['url'] == $system['url']) {?>
+               <?php foreach($val['data'] as $key=>$val1) {?>
+               <option value="<?php echo $key;?>"  <?php if($key == $required[METHOD]) {?>selected<?php }?>><?php echo $key;?></option>
+               <?php }?>
            <?php }?>
         <?php }?>
     </select>
@@ -87,9 +93,21 @@ $("#btn_apply").click(function(){
         var list = $("#sel_list").val().toString().split(",");
         $.cookie("url",$("#sel_url").val());
         $.cookie("act",list[0]);
+        window.location.reload();
     } else {
         alert("选择一下呀");
     }
+});
+
+$("#sel_url").change(function(){
+    $("#sel_list option").remove();
+    var index = $("#sel_url option:selected").attr("index");
+    if(index){
+        for( o in json_data[index-1]["data"]){
+            $("#sel_list").append("<option value=\""+ o +"\">"+ o +"</option>");
+        }
+    }
+    return false;
 });
 </script>
 </body>
