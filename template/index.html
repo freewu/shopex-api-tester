@@ -117,6 +117,10 @@ $("#sel_url").change(function(){
     return false;
 });
 
+$("#sel_list").click(function(e){
+    $("#btn_apply").click();    
+});
+
 $(":radio").click(function(){
     $.cookie("type",this.value);
     window.location.reload();
