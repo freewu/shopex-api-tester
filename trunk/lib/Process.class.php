@@ -1,8 +1,7 @@
 <?php
-include_once("Snoopy.class.php");
+include_once("Request.class.php");
 include_once("Cache.class.php");
-class Process
-{
+class Process {
     var $_post = null;
     var $_required = null;
     var $_url = null;
@@ -10,12 +9,15 @@ class Process
     var $_cache = null;
     var $_result = null;
 
-    function Process($required = array()){
-        $this->_cache = new Cache(APITYPE);
+	function Process($required = array()){
+		if(!empty($required)) $this->setRequiredData($required);
+    }
+	function setRequiredData($required) {
+		$this->_cache = new Cache(APITYPE);
         $aData = $this->run($required);
         // 保存数据
         $this->_cache->saveData($this->getSystem(),$this->_getParams($aData));
-    }
+	}
     
     function _getCookie($aConfig) {
         if(!isset($_COOKIE['url']) || !isset($_COOKIE['act'])) return false;
@@ -95,12 +97,13 @@ class Process
         }
         
         if(isset($aData['url']) && $aData['url']) { // 还是要验证是不是url的哈
-           $snoopy = new Snoopy();
-           if($snoopy->submit($aData['url'],$aParams)) {
+           $objRequest = new Request();
+           if($objRequest->submit($aData['url'],$aParams)) {
+                $result = $objRequest->getResult();
                if(isset($aParams['format_json']) && $aParams['format_json']) {
-                   if($aTemp = json_decode($snoopy->results)) return print_r($aTemp,1);
+                   if($aTemp = json_decode($result)) return print_r($aTemp,1);
                }
-               return urldecode(str_replace("&gt;&lt;","&gt;<br/>&lt;",htmlentities($snoopy->results)));
+               return urldecode(str_replace("&gt;&lt;","&gt;<br/>&lt;",htmlentities($result)));
            } else {
                return "请求失败";
            }
@@ -144,20 +147,6 @@ class Process
         return array("url"=>$this->_url,
                      "token"=>$this->_token
         );
-    }
-    
-    function getHistory() {
-        return $this->_cache->getList();
-    }
-    
-    function getTypes() {
-        $oDir = opendir("./config");
-        $aResult = array();
-        while($item = readdir($oDir)) {
-           $aTemp = explode(".",$item);
-           if(isset($aTemp[1]) && !empty($aTemp[1]) && isset($aTemp[2])) $aResult[] = $aTemp[1];
-        }
-        return $aResult;
-    }
-}
-?>
+    } 
+
+} // end class
